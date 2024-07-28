@@ -72,9 +72,11 @@ function add_to_list_by_dict_condition() { # args: 1 - condition dict, 2 - to ad
   declare -n list=$3
   for element in "${!condition_dict[@]}"; do
     if ${condition_dict[$element]}; then
-      list+=("${add_dict[$element]}")
-    else
-      echo "No script for $element installation"
+      if [ -v "add_dict[$element]" ]; then
+        list+=("${add_dict[$element]}")
+      else
+        echo "No script for $element installation"
+      fi
     fi
   done
 }
