@@ -85,15 +85,30 @@ function add_to_list_by_dict_condition() { # args: 1 - condition dict, 2 - to ad
 install_packages() {
   local packages=("$@")
   for package in "${packages[@]}"; do
-    sudo pacman -S --noconfirm --needed "$package"
+    if ! sudo pacman -S --noconfirm --needed "$package"; then
+      echo "Error occurred while installing $package. Do you want to continue? (y/n)"
+      read -r response
+      if [[ "$response" != "y" ]]; then
+        echo "Stopping installation."
+        exit 1
+      fi
+    fi
   done
 }
+
 
 # Function to install Flatpak applications
 install_flatpaks() {
   local flatpaks=("$@")
   for flatpak in "${flatpaks[@]}"; do
-    flatpak install flathub "$flatpak" -y
+    if ! flatpak install flathub "$flatpak" -y; then
+      echo "Error occurred while installing $flatpak. Do you want to continue? (y/n)"
+      read -r response
+      if [[ "$response" != "y" ]]; then
+        echo "Stopping installation."
+        exit 1
+      fi
+    fi
   done
 }
 
