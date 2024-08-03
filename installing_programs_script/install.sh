@@ -264,16 +264,17 @@ fi
 # +--------------------------+
 
 if $install_zsh; then
-  pacman -S --noconfirm --needed zsh
-  chsh -s $(which zsh)
+  sudo pacman -S --noconfirm --needed zsh
+  sudo chsh -s $(which zsh)
   echo "ZSH has been installed."
 fi
 
 if $install_yay; then
-  pacman -S --noconfirm --needed base-devel
+  sudo pacman -S --noconfirm --needed base-devel
   git clone https://aur.archlinux.org/yay.git
   cd yay
   makepkg -si --noconfirm
+  cd ..
   echo "yay has been installed."
 fi
 
